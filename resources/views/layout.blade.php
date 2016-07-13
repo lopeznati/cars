@@ -68,16 +68,146 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript">
+
+    var url_years = "{{ route('makeyears','ID') }}";
+
+    var url_model = "{{ route('models','ID') }}";
+
+    /*
     $(document).ready(function () {
-        $('select').select2();
+        $('#search select').select2({
+            allowClear: true,
+            placeholder: {
+                id: "",
+                text: 'Select value'
+            }
+        });
+
+        /*
         $('#search select').change(function () {
 
             //va a enviar los datos al navegador
             $('#search').submit();
         })
 
-    })
+        */
 
+        //funcion popularselect, para carar los combos
+
+        /*)
+
+        $.fn.popularSelect=function (values) {
+            var option ='';
+
+            //recoro los valores, 1º el valor a recorrer, y en e segunda la funcion que se ejecuta al recorrer cada argumento
+
+            $.each(values,function (key,row) {
+                options+='<option value="' + row.value + '">' + row.text + '</option>';
+
+
+            });
+            $(this).html(options); //asignamos la opcion a html
+
+        }
+
+
+        $.fn.populateSelect = function (values) {
+            var options = '';
+            $.each(values, function (key, row) {
+                options += '<option value="' + row.value + '">' + row.text + '</option>';
+            });
+            $(this).html(options);
+        }
+
+        //cuando selecciono uno
+
+        $('#make_id').change(function () {
+
+            //lo vacio
+            $('#model_id').empty().change();
+
+            //guardo la amrca seleccionada
+
+            var make_id = $(this).val();
+
+            //si esta vacio, lo vacio al otro
+
+            if (make_id == '') {
+                $('#makeyear_id').empty().change();
+            } else {
+
+                //utilizo ajax, 1ª lo mando a la ruta que hice, 2ª paso la data, 3ª funcion anonima q se ejecuta al recibir los datos
+                //getjason pq recibo datos json
+                $.getJSON('/makeyears/'+make_id, null, function (values) {
+                    $('#makeyear_id').populateSelect(values);
+                });
+            }
+        });
+
+        $('#makeyear_id').change(function () {
+            var year = $(this).val();
+
+            if (year == '') {
+                $('#model_id').empty().change();
+            } else {
+                $.getJSON('/models/'+year, null, function (values) {
+                    $('#model_id').populateSelect(values);
+                });
+            }
+        });
+
+    });
+    */
+
+
+    $(document).ready(function () {
+        $('#search select').select2({
+            allowClear: true,
+            placeholder: {
+                id: "",
+                text: 'Select value'
+            }
+        });
+
+        $.fn.populateSelect = function (values) {
+            var options = '';
+            $.each(values, function (key, row) {
+                options += '<option value="' + row.value + '">' + row.text + '</option>';
+            });
+            $(this).html(options);
+        }
+
+        $('#make_id').change(function () {
+            $('#model_id').empty().change();
+
+            var make_id = $(this).val();
+
+            if (make_id == '') {
+                $('#makeyear_id').empty().change();
+            } else {
+                var url = url_years.replace('ID',make_id);
+                $.getJSON(url, null, function (values) {
+                    $('#makeyear_id').populateSelect(values);
+                });
+            }
+        });
+
+        $('#makeyear_id').change(function () {
+            var year = $(this).val();
+
+            if (year == '') {
+                $('#model_id').empty().change();
+            } else {
+
+                var url = url_model.replace('ID',year);
+                $.getJSON(url, null, function (values) {
+                    $('#model_id').populateSelect(values);
+                });
+            }
+        });
+
+    });
+@yield('s')
 </script>
 </body>
 </html>
