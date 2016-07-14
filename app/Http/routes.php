@@ -27,9 +27,9 @@ Route::get('bootstrap', function () {
 
 Route::get('autocomplete/users',['as'=>'autocomplete/users', function () {
     $user=Request::get('user');
-    //return \App\User::findByName($term);
+    //return \App\User::findByName($user);
 
-    return \App\User::select('id','name','email')
+   return \App\User::select('id','name','email')
         ->where('name','LIKE',"%$user%")
         ->orWhere('email','LIKE',"%$user%")
         ->get();

@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public  function findByName($term){
+    public static function findByName($term){
        return static::select('id','name','email')
             ->where('name','LIKE',"%$term%")
             ->orWherewhere('email','LIKE',"%$term%")
