@@ -10,7 +10,12 @@
     <h1>Autocomplete Demo</h1>
     {!! Form::open(['class'=>'form']) !!}
 
-    <input type="text" name="user" id="user" class="easy-autocomplete">
+    <input type="text" name="user" id="user" class="easy-autocomplete"><br>
+
+
+    <input type="hidden" name="user_id" id="user_id" >
+
+    <input type="submit" class="btn btn-primary" value="enviar">
     {!! Form::close() !!}
 
 @endsection
@@ -19,12 +24,18 @@
     {!! Html::script('assest/js/jquery.easy-autocomplete.js') !!}
 
     <script>
-        var url_inicio="{{Route('inicio')}}";
+       // var url_inicio="{{Route('inicio')}}";
+       var url_inicio="{{Route('autocomplete/users')}}";
+       var url_inicio2="{{Route('getUser','ID')}}";
+
+
         $(document).ready(function(){
 
 
             var options = {
-                url: url_inicio + "/resources/people.json",
+               // url: url_inicio + "/resources/people.json",
+
+                url: url_inicio,
 
                 getValue: "name",
 
@@ -38,6 +49,26 @@
                 list: {
                     match: {
                         enabled: true
+                    },
+                    onSelectItemEvent: function() {
+                        var user = $("#user").getSelectedItemData();
+
+                        //console.log(user);
+
+                        $('#user_id').val(user.id);
+
+                        //$("#index-holder").val(index).trigger("change");
+                    },
+
+                    //buscador
+
+
+
+                    onClickEvent:function () {
+
+                        var user = $("#user").getSelectedItemData();
+                        window.location.href=url_inicio2.replace('ID',user.id);
+
                     }
                 },
 
@@ -63,7 +94,10 @@
 
 
 
-        });
+        }).change(function () {
+           $('#user_id').val('');
+
+       });
 
 
     </script>

@@ -17,7 +17,7 @@ class DatabaseSeeder extends \Styde\Seeder\BaseSeeder
     );
     protected $seeders=array(
         'User',
-        'Features',
+        'Feature',
         'Car'
     );
    

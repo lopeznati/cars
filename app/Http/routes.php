@@ -25,10 +25,18 @@ Route::get('bootstrap', function () {
     return view('bootstrap');
 });
 
-Route::get('autocomplete/users', function () {
-   $term=Request::get('term');
-    return \App\User::findByName($term);
-});
+Route::get('autocomplete/users',['as'=>'autocomplete/users', function () {
+    $user=Request::get('user');
+    //return \App\User::findByName($term);
+
+    return \App\User::select('id','name','email')
+        ->where('name','LIKE',"%$user%")
+        ->orWhere('email','LIKE',"%$user%")
+        ->get();
+}]);
+
+
+
 
 Route::get('dropdowns', function () {
     return view('components/dropdowns');
@@ -83,3 +91,13 @@ Route::get('autocomplete/demo',function(){
     return view('components/autocomplete_demo');
 
 });
+
+Route::post('autocomplete/demo',function(){
+    return Request::all();
+
+});
+
+Route::get('user/{id}',['as'=>'getUser',function($id){
+    return \App\User::find($id);
+
+}]);
