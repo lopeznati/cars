@@ -17,12 +17,17 @@ use App\Entities\MakeYear;
 use App\Entities\Model;
 use Illuminate\Support\Facades\Request;
 
-Route::get('/', function () {
+Route::get('/', ['as'=>'inicio', function () {
     return view('welcome');
-});
+}]);
 
 Route::get('bootstrap', function () {
     return view('bootstrap');
+});
+
+Route::get('autocomplete/users', function () {
+   $term=Request::get('term');
+    return \App\User::findByName($term);
 });
 
 Route::get('dropdowns', function () {
@@ -72,4 +77,9 @@ Route::post('features', function () {
 
 
    return redirect()->to('features');
+});
+
+Route::get('autocomplete/demo',function(){
+    return view('components/autocomplete_demo');
+
 });
